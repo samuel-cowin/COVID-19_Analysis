@@ -1,3 +1,4 @@
+# Project completed for ECE227 Big Network Data at UC San Diego with Prof. Massimo Franceschetti
 # COVID-19_Analysis
 SEIR model with deep learning parameter estimation for COVID-19 death and vaccination analysis
 <br><br>
