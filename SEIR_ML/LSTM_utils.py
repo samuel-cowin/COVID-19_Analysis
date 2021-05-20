@@ -1,9 +1,7 @@
 """
 ECE227 Final Project SP21 by Samuel Cowin and Fatemeh Asgarinejad
 
-Reproduction of the SEIR methodology proposed in this paper:
-    "Stability analysis of SEIR model related to efficiency of vaccines for COVID-19 situation" 
-    by Phitchayapak Wintachaia and Kiattisak Prathom
+Data found at https://github.com/govex/COVID-19 by Johns Hopkins University
 """
 
 
