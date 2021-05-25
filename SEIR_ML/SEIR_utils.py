@@ -18,10 +18,10 @@ class SEIR:
         Initializing parameters from paper for fixed rates regarding state transitions and vaccine effectiveness
         """
 
-        self.alpha = 6
-        self.beta = 16
-        self.gamma = 0.001
-        self.p_s = 0.35
+        self.alpha = 4
+        self.beta = 14
+        self.gamma = 0.075
+        self.p_s = 0.4
         self.p_e = 0.1
         self.p_i = 0.0
         self.b_0 = 0.0
@@ -113,10 +113,10 @@ class SEIR:
         Change dataset into callable vaccination rate
         """
 
-        if time==0:
+        if int(time)==0:
             return 0
         else:
-            return data[int(time)]/pop
+            return (data[int(time)]-data[int(time)-1])/pop
 
 
     def SEIR(self, t, state, v_rate, data, pop, call_v=True):
