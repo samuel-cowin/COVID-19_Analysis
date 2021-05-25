@@ -21,12 +21,12 @@ SEIR with set vaccination rates
 
 # Fit SEIR with changing fixed vaccination rates
 model1 = SEIR()
-sol = model1.fit(data=[], pop=[], v=0.0, days=500, call=False)
-plot_model_and_predict(sol.y, title='SEIR - v=0.0')
-sol = model1.fit(data=[], pop=[], v=0.1, days=500, call=False)
-plot_model_and_predict(sol.y, title='SEIR - v=0.1')
-sol = model1.fit(data=[], pop=[], v=1.0, days=500, call=False)
-plot_model_and_predict(sol.y, title='SEIR - v=1.0')
+sol1 = model1.fit(data=[], pop=[], v=0.0, days=420, call=False)
+plot_model_and_predict(sol1.y, title='SEIR - v=0.0')
+sol2 = model1.fit(data=[], pop=[], v=0.01, days=420, call=False)
+plot_model_and_predict(sol2.y, title='SEIR - v=0.01')
+sol3 = model1.fit(data=[], pop=[], v=0.1, days=420, call=False)
+plot_model_and_predict(sol3.y, title='SEIR - v=0.1')
 
 
 """
@@ -46,10 +46,10 @@ confirmed_norm = [c/population_state for c in list(confirmed.iloc[state+1])[1:]]
 
 # Fit SEIR with vaccination rates
 model2 = SEIR()
-sol = model2.fit(days=len(vaccination_state)-1, data=vaccination_state, pop=population_state)
-plot_model_and_predict(sol.y, title='SEIR - known vaccination rates')
+sol4 = model2.fit(days=len(vaccination_state)-1, data=vaccination_state, pop=population_state)
+plot_model_and_predict(sol4.y, title='SEIR - known vaccination rates')
 
-[sus, exp, inf, rec] = sol.y
+[sus, exp, inf, rec] = sol4.y
 f = plt.figure(figsize=(16,5))
 plt.plot(inf, 'b', label='SEIR')
 plt.plot(confirmed_norm, 'r', label='Real')
@@ -95,12 +95,25 @@ for i in range(len(confirmed_norm)-len(vaccination_state)):
 # # Fit SEIR with added vaccination rates
 new_vaccination_state = np.concatenate((vaccination_state, x_pred))
 model3 = SEIR()
-sol = model3.fit(days=len(new_vaccination_state)-1, data=new_vaccination_state, pop=population_state)
-plot_model_and_predict(sol.y, title='SEIR - predicted vaccination rates')
+sol5 = model3.fit(days=len(new_vaccination_state)-1, data=new_vaccination_state, pop=population_state)
+plot_model_and_predict(sol5.y, title='SEIR - predicted vaccination rates')
 
-[sus, exp, inf, rec] = sol.y
+
+"""
+Final plotting comparison
+"""
+
+[sus1, exp1, inf1, rec1] = sol1.y
+[sus2, exp2, inf2, rec2] = sol2.y
+[sus3, exp3, inf3, rec3] = sol3.y
+[sus4, exp4, inf4, rec4] = sol4.y
+[sus5, exp5, inf5, rec5] = sol5.y
 f = plt.figure(figsize=(16,5))
-plt.plot(inf, 'b', label='SEIR')
+plt.plot(inf1, 'g', label='SEIR - v=0.0')
+plt.plot(inf2, 'c', label='SEIR - v=0.01')
+plt.plot(inf3, 'm', label='SEIR - v=0.1')
+plt.plot(inf4, 'k', label='SEIR - v real')
+plt.plot(inf5, 'b', label='SEIR - v predicted')
 plt.plot(confirmed_norm, 'r', label='Real')
 plt.title('Infected - predicted SEIR vs. Real')
 plt.xlabel("Time", fontsize=10)

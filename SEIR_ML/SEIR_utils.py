@@ -21,8 +21,8 @@ class SEIR:
         self.alpha = 4
         self.beta = 14
         self.gamma = 0.075
-        self.p_s = 0.4
-        self.p_e = 0.1
+        self.p_s = 0.9
+        self.p_e = 0.6
         self.p_i = 0.0
         self.b_0 = 0.0
         self.d_0 = 0.0
