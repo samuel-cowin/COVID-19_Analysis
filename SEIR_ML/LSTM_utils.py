@@ -21,13 +21,11 @@ def vaccination_data():
 
     url = "https://raw.githubusercontent.com/govex/COVID-19/master/data_tables/vaccine_data/us_data/time_series/time_series_covid19_vaccine_doses_admin_US.csv"
     vaccination = pd.read_csv(url, error_bad_lines=False)
-    print(vaccination.head())
 
     for c in list(vaccination.columns)[:10]:
         del vaccination[c]
 
     vaccination = vaccination.fillna(0)
-    print(vaccination.head())
 
     return vaccination
 

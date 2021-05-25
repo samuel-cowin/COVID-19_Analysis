@@ -18,7 +18,7 @@ class SEIR:
         Initializing parameters from paper for fixed rates regarding state transitions and vaccine effectiveness
         """
 
-        self.alpha = 1/11.5
+        self.alpha = 6
         self.beta = 10
         self.gamma = 0.0686
         self.p_s = 0.0
@@ -113,7 +113,10 @@ class SEIR:
         Change dataset into callable vaccination rate
         """
 
-        return data[int(time)]/pop
+        if time==0:
+            return 0
+        else:
+            return data[int(time)]/pop
 
 
     def SEIR(self, t, state, v_rate, data, pop, call_v=True):
@@ -141,7 +144,7 @@ class SEIR:
         return [S_change, E_change, I_change, R_change]
 
 
-    def fit(self, data, pop, S_init=0.97, E_init=0.01, I_init=0.01, R_init=0.01, days=5000):
+    def fit(self, data, pop, S_init=0.994, E_init=0.002, I_init=0.002, R_init=0.002, days=5000):
         """
         Method to fit the SEIR model and solve the ODEs for presentation
             S_init: initial percentage of the population that is susceptible
@@ -157,7 +160,7 @@ class SEIR:
         r = R_init
         v_rate = 0.0
 
-        sol = solve_ivp(fun=self.SEIR, t_span=[0, days], y0=[s, e, i, r], args=[v_rate, data, pop], t_eval=range(days))
+        sol = solve_ivp(fun=self.SEIR, t_span=[0, days], y0=[s, e, i, r], args=[v_rate, data, pop], t_eval=list(range(days+1)))
 
         return sol
 
