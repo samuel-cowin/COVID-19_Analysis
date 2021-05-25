@@ -16,6 +16,20 @@ warnings.filterwarnings('ignore')
 
 
 """
+SEIR with set vaccination rates
+"""
+
+# Fit SEIR with changing fixed vaccination rates
+model1 = SEIR()
+sol = model1.fit(data=[], pop=[], v=0.0, days=500, call=False)
+plot_model_and_predict(sol.y, title='SEIR - v=0.0')
+sol = model1.fit(data=[], pop=[], v=0.1, days=500, call=False)
+plot_model_and_predict(sol.y, title='SEIR - v=0.1')
+sol = model1.fit(data=[], pop=[], v=1.0, days=500, call=False)
+plot_model_and_predict(sol.y, title='SEIR - v=1.0')
+
+
+"""
 Initial SEIR fit with real vaccination data
 """
 
@@ -31,19 +45,18 @@ confirmed = pd.read_csv('../Dataset/Confirmed.csv', error_bad_lines=False)
 confirmed_norm = [c/population_state for c in list(confirmed.iloc[state+1])[1:]]
 
 # Fit SEIR with vaccination rates
-model = SEIR()
-sol = model.fit(days=len(vaccination_state)-1, data=vaccination_state, pop=population_state)
-plot_model_and_predict(sol.y)
+model2 = SEIR()
+sol = model2.fit(days=len(vaccination_state)-1, data=vaccination_state, pop=population_state)
+plot_model_and_predict(sol.y, title='SEIR - known vaccination rates')
 
 [sus, exp, inf, rec] = sol.y
 f = plt.figure(figsize=(16,5))
 plt.plot(inf, 'b', label='SEIR')
 plt.plot(confirmed_norm, 'r', label='Real')
-plt.title('Infected - SEIR vs. Real')
+plt.title('Infected - known SEIR vs. Real')
 plt.xlabel("Time", fontsize=10)
 plt.ylabel("Fraction of population", fontsize=10)
 plt.ylim([0, 0.2])
-# plt.xlim([0, 200])
 plt.legend(loc='best')
 plt.show()
 
@@ -64,7 +77,7 @@ T =(vaccination_state[-1])
 
 # Compute error
 error = (E-T)/T*100
-print("Average error is {} percent".format(error))
+print("Average error is {} percent for initial prediction".format(error))
 
 # Compute error based on population
 w = population_state*error
@@ -81,18 +94,17 @@ for i in range(len(confirmed_norm)-len(vaccination_state)):
 
 # # Fit SEIR with added vaccination rates
 new_vaccination_state = np.concatenate((vaccination_state, x_pred))
-model = SEIR()
-sol = model.fit(days=len(new_vaccination_state)-1, data=new_vaccination_state, pop=population_state)
-plot_model_and_predict(sol.y)
+model3 = SEIR()
+sol = model3.fit(days=len(new_vaccination_state)-1, data=new_vaccination_state, pop=population_state)
+plot_model_and_predict(sol.y, title='SEIR - predicted vaccination rates')
 
 [sus, exp, inf, rec] = sol.y
 f = plt.figure(figsize=(16,5))
 plt.plot(inf, 'b', label='SEIR')
 plt.plot(confirmed_norm, 'r', label='Real')
-plt.title('Infected - SEIR vs. Real')
+plt.title('Infected - predicted SEIR vs. Real')
 plt.xlabel("Time", fontsize=10)
 plt.ylabel("Fraction of population", fontsize=10)
 plt.ylim([0, 0.2])
-# plt.xlim([0, 200])
 plt.legend(loc='best')
 plt.show()

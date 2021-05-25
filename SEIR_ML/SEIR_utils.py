@@ -19,10 +19,10 @@ class SEIR:
         """
 
         self.alpha = 6
-        self.beta = 10
-        self.gamma = 0.0686
-        self.p_s = 0.0
-        self.p_e = 0.0
+        self.beta = 16
+        self.gamma = 0.001
+        self.p_s = 0.35
+        self.p_e = 0.1
         self.p_i = 0.0
         self.b_0 = 0.0
         self.d_0 = 0.0
@@ -144,7 +144,7 @@ class SEIR:
         return [S_change, E_change, I_change, R_change]
 
 
-    def fit(self, data, pop, S_init=0.994, E_init=0.002, I_init=0.002, R_init=0.002, days=5000):
+    def fit(self, data, pop, v=0.0, call=True, S_init=0.994, E_init=0.002, I_init=0.002, R_init=0.002, days=5000):
         """
         Method to fit the SEIR model and solve the ODEs for presentation
             S_init: initial percentage of the population that is susceptible
@@ -158,9 +158,9 @@ class SEIR:
         e = E_init
         i = I_init
         r = R_init
-        v_rate = 0.0
+        v_rate = v
 
-        sol = solve_ivp(fun=self.SEIR, t_span=[0, days], y0=[s, e, i, r], args=[v_rate, data, pop], t_eval=list(range(days+1)))
+        sol = solve_ivp(fun=self.SEIR, t_span=[0, days], y0=[s, e, i, r], args=[v_rate, data, pop, call], t_eval=list(range(days+1)))
 
         return sol
 
@@ -180,7 +180,7 @@ def plot_model_and_predict(solution, title='SEIR model'):
     plt.title(title)
     plt.xlabel("Days", fontsize=10)
     plt.ylabel("Fraction of population", fontsize=10)
-    plt.ylim([0, 1])
+    plt.ylim([0, 0.5])
     plt.legend(loc='best')
     plt.show()
 
