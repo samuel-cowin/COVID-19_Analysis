@@ -18,11 +18,11 @@ class SEIR:
         Initializing parameters from paper for fixed rates regarding state transitions and vaccine effectiveness
         """
 
-        self.alpha = 4
-        self.beta = 14
-        self.gamma = 0.075
+        self.alpha = 1800
+        self.beta = 450
+        self.gamma = 0.05
         self.p_s = 0.9
-        self.p_e = 0.6
+        self.p_e = 0.0
         self.p_i = 0.0
         self.b_0 = 0.0
         self.d_0 = 0.0
@@ -68,7 +68,7 @@ class SEIR:
         return self.beta*(1-v*self.p_s)*S*I - (self.d_1+self.alpha+(1-self.alpha)*v*self.p_e)*E
 
 
-    def dI_dt(self, v, E, I):
+    def dI_dt(self, v, t, E, I):
         """
         Modeling infected characteristics as:
         dI_dt = alpha*E - (d_2+gamma+(1-gamma)*v*p_i)*I
@@ -83,10 +83,10 @@ class SEIR:
             I: fraction of infectious cases
         """
 
-        return self.alpha*E - (self.d_2+self.gamma+(1-self.gamma)*v*self.p_i)*I
+        return self.alpha*E - (self.d_2+self.gamma*t+(1-self.gamma*t)*v*self.p_i)*I
 
 
-    def dR_dt(self, v, S, E, I, R):
+    def dR_dt(self, v, t, S, E, I, R):
         """
         Modeling infected characteristics as:
         dR_dt = v*p_s_S + v*p_e*(1-alpha)*E + (gamma+(1-gamma)*v*p_i)*I - d_0*R
@@ -105,7 +105,7 @@ class SEIR:
             R: fraction of recovered cases
         """
 
-        return v*self.p_s*S + v*self.p_e*(1-self.alpha)*E + (self.gamma+(1-self.gamma)*v*self.p_i)*I - self.d_0*R
+        return v*self.p_s*S + v*self.p_e*(1-self.alpha)*E + (self.gamma*t+(1-self.gamma*t)*v*self.p_i)*I - self.d_0*R
 
 
     def get_v_rate(self, data, pop, time):
@@ -138,13 +138,13 @@ class SEIR:
         
         S_change = S*self.dS_dt(v, S, I)
         E_change = E*self.dE_dt(v, S, E, I)
-        I_change = I*self.dI_dt(v, E, I)
-        R_change = R*self.dR_dt(v, S, E, I, R)
+        I_change = I*self.dI_dt(v, t, E, I)
+        R_change = R*self.dR_dt(v, t, S, E, I, R)
 
         return [S_change, E_change, I_change, R_change]
 
 
-    def fit(self, data, pop, v=0.0, call=True, S_init=0.994, E_init=0.002, I_init=0.002, R_init=0.002, days=5000):
+    def fit(self, data, pop, v=0.0, call=True, S_init=0.99994, E_init=0.00002, I_init=0.00002, R_init=0.00002, days=5000):
         """
         Method to fit the SEIR model and solve the ODEs for presentation
             S_init: initial percentage of the population that is susceptible
