@@ -99,14 +99,18 @@ sol5 = model3.fit(days=len(new_vaccination_state)-1, data=new_vaccination_state,
 # plot_model_and_predict(sol5.y, title='SEIR - predicted vaccination rates')
 
 rates = []
+R0 = []
 for v in range(1, len(new_vaccination_state)):
     rates.append((new_vaccination_state[v]-new_vaccination_state[v-1])/population_state)
-    
-plt.plot(rates, 'r')
+    R0.append(model1.get_R0(v=new_vaccination_state[v]))
+
+plt.plot(rates, 'r', label='V rate')
+plt.plot(R0, 'b', label='R_0')
 plt.title('Vaccinations rate - predicted')
 plt.xlabel("Time", fontsize=10)
 plt.ylabel("Fraction of population", fontsize=10)
 # plt.ylim([0, 0.005])
+plt.legend(loc='best')
 plt.show()
 
 
@@ -126,9 +130,38 @@ plt.plot(inf3, 'm', label='SEIR - v=0.1')
 plt.plot(inf4, 'k', label='SEIR - v real')
 plt.plot(inf5, 'b', label='SEIR - v predicted')
 plt.plot(confirmed_norm, 'r', label='Real')
-plt.title('Infected - predicted SEIR vs. Real')
-plt.xlabel("Time", fontsize=10)
-plt.ylabel("Fraction of population", fontsize=10)
+plt.title('Infected - predicted SEIR vs. Real', fontsize=30)
+plt.xlabel("Time", fontsize=20)
+plt.ylabel("Fraction of population", fontsize=20)
 plt.ylim([0, 0.005])
-plt.legend(loc='best')
+plt.legend(loc='best', fontsize=20)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+plt.show()
+
+
+"""
+Final plotting comparison - shorten timeline
+"""
+
+start = 215
+[sus1, exp1, inf1, rec1] = sol1.y
+[sus2, exp2, inf2, rec2] = sol2.y
+[sus3, exp3, inf3, rec3] = sol3.y
+[sus4, exp4, inf4, rec4] = sol4.y
+[sus5, exp5, inf5, rec5] = sol5.y
+f = plt.figure(figsize=(16,5))
+plt.plot(inf1[:start], 'g', label='SEIR - v=0.0')
+plt.plot(inf2[:start], 'c', label='SEIR - v=0.01')
+plt.plot(inf3[:start], 'm', label='SEIR - v=0.1')
+plt.plot(inf4[:start], 'k', label='SEIR - v real')
+plt.plot(inf5[:start], 'b', label='SEIR - v predicted')
+plt.plot(confirmed_norm[start:], 'r', label='Real')
+plt.title('Infected - predicted SEIR vs. Real', fontsize=30)
+plt.xlabel("Time", fontsize=20)
+plt.ylabel("Fraction of population", fontsize=20)
+plt.ylim([0, 0.005])
+plt.legend(loc='best', fontsize=20)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
 plt.show()

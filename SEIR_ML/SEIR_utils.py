@@ -9,6 +9,7 @@ Reproduction of the SEIR methodology proposed in this paper:
 
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 class SEIR:
@@ -18,16 +19,29 @@ class SEIR:
         Initializing parameters from paper for fixed rates regarding state transitions and vaccine effectiveness
         """
 
+        # Parameters for full timeline
         self.alpha = 1800
         self.beta = 450
         self.gamma = 0.05
         self.p_s = 0.9
         self.p_e = 0.0
         self.p_i = 0.0
-        self.b_0 = 0.0
-        self.d_0 = 0.0
-        self.d_1 = 0.0
-        self.d_2 = 0.0
+        self.b_0 = 0.00001
+        self.d_0 = 0.00001
+        self.d_1 = 0.00001
+        self.d_2 = 0.00001
+
+        # # Parameters for shortened timeline
+        # self.alpha = 3800
+        # self.beta = 4500
+        # self.gamma = 1.0
+        # self.p_s = 0.9
+        # self.p_e = 0.0
+        # self.p_i = 0.0
+        # self.b_0 = 0.00001
+        # self.d_0 = 0.00001
+        # self.d_1 = 0.00001
+        # self.d_2 = 0.00001
 
 
     def dS_dt(self, v, S, I):
@@ -117,6 +131,18 @@ class SEIR:
             return 0
         else:
             return (data[int(time)]-data[int(time)-1])/pop
+
+    
+    def get_R0(self, v=0):
+        """
+        Method to get the R_0 number from the chosen parameters
+        """
+        R = (self.alpha*self.beta*(1-v*self.p_s)*self.b_0)/\
+            ((self.d_1+self.alpha+(1-self.alpha)*v*self.p_e)*\
+                (self.d_2+self.gamma+(1-self.gamma)*v*self.p_i*(self.p_s*v+self.d_0)))
+
+        R = np.clip(R, 0, 1)
+        return np.sqrt(R)
 
 
     def SEIR(self, t, state, v_rate, data, pop, call_v=True):
