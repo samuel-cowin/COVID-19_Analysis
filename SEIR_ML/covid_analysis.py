@@ -6,7 +6,7 @@ SEIR model with vaccination rate predictions using Deep Learning
 
 
 from LSTM_utils import LSTM_after_start, vaccination_data
-from SEIR_utils import SEIR, plot_model_and_predict
+from SEIR_utils import SEIR, plot_model_and_predict, compute_mse
 
 import numpy as np
 import pandas as pd
@@ -105,12 +105,14 @@ for v in range(1, len(new_vaccination_state)):
     R0.append(model1.get_R0(v=new_vaccination_state[v]))
 
 plt.plot(rates, 'r', label='V rate')
-plt.plot(R0, 'b', label='R_0')
-plt.title('Vaccinations rate - predicted')
-plt.xlabel("Time", fontsize=10)
-plt.ylabel("Fraction of population", fontsize=10)
+# plt.plot(R0, 'b', label='R_0')
+plt.title('Vaccinations rate - predicted', fontsize=30)
+plt.xlabel("Time", fontsize=20)
+plt.ylabel("Fraction of population", fontsize=20)
 # plt.ylim([0, 0.005])
-plt.legend(loc='best')
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+# plt.legend(loc='best')
 plt.show()
 
 
@@ -165,3 +167,10 @@ plt.legend(loc='best', fontsize=20)
 plt.xticks(fontsize=20)
 plt.yticks(fontsize=20)
 plt.show()
+
+
+"""
+Compute MSE loss between real and predicted 
+"""
+
+mse = compute_mse(confirmed_norm, inf5)

@@ -12,6 +12,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
+def compute_mse(y, y_hat):
+    difference = y-y_hat
+    return np.sqrt(np.dot(difference, difference))
+
+
 class SEIR:
 
     def __init__(self):
