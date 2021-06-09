@@ -41,8 +41,9 @@ population = list(vaccination['Population'])
 population_state = population[state]
 
 # Retrieve real confirmed cases
-confirmed = pd.read_csv('../Dataset/DailyConfirmed.csv', error_bad_lines=False)
+confirmed = pd.read_csv('../Dataset/Combined_data/Active_Daily.csv', error_bad_lines=False)
 confirmed_norm = [c/population_state for c in list(confirmed.iloc[state+1])[2:]]
+print(confirmed.iloc[state+1])
 
 # Fit SEIR with vaccination rates
 model2 = SEIR()
