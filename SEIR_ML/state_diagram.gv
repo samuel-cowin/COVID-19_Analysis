@@ -1,0 +1,30 @@
+digraph {
+    graph [rankdir=LR] // left-right layout, not top-down
+    S [shape=square, fontcolor=black, penwidth=3, style=filled, fillcolor=aqua]
+    E [shape=square, fontcolor=black, penwidth=3, style=filled, fillcolor=yellow]
+    I [shape=square, fontcolor=black, penwidth=3, style=filled, fillcolor=red]
+    R [shape=square, fontcolor=black, penwidth=3, style=filled, fillcolor=green]
+    LSTM [shape=square, fontcolor=black, penwidth=3, style=filled, fillcolor=white]
+    d0 [label= "", shape=none,height=.0,width=.0]
+    d1 [label= "", shape=none,height=.0,width=.0]
+    d2 [label= "", shape=none,height=.0,width=.0]
+    d3 [label= "", shape=none,height=.0,width=.0]
+    b0 [label= "", shape=none,height=.0,width=.0]
+
+    S -> E [style=bold, color=black, weight=5, label="&beta;I"]
+    E -> I [style=bold, color=black, weight=5, label="&alpha;"]
+    I -> R [style=bold, color=black, weight=5, label="&gamma;"]
+    LSTM -> S [style=bold, color=blue, label="v"]
+    LSTM -> E [style=bold, color=blue, label="v"]
+    LSTM -> I [style=bold, color=blue, label="v"]
+
+    S -> R [style=dotted, color=blue, label=<vp<SUB>s</SUB>>]
+    E -> R [style=dotted, color=blue, label=<vp<SUB>e</SUB>>]
+    I -> R [style=dotted, color=blue, label=<vp<SUB>i</SUB>>]
+
+    S -> d0 [style=dotted, color=red, weight=50, label=<d<SUB>0</SUB>>]
+    E -> d1 [style=dotted, color=red, weight=50, label=<d<SUB>1</SUB>>]
+    I -> d2 [style=dotted, color=red, weight=50, label=<d<SUB>2</SUB>>]
+    R -> d3 [style=dotted, color=red, weight=50, label=<d<SUB>0</SUB>>]
+    b0 -> S [style=dotted, color=red, weight=50, label=<b<SUB>0</SUB>>]
+}
